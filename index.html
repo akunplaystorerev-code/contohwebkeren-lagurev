@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Toko Otomatis</title>
+<style>
+  body {
+    margin: 0;
+    font-family: Arial;
+    background: url('https://ibb.co.com/wZcKVPY2') no-repeat center/cover;
+    color: white;
+    text-shadow: 0 0 5px #000;
+  }
+  #login, #produkSection, #paymentPopup {text-align: center; padding: 30px;}
+  button {padding: 12px 20px; margin: 10px; border: none; border-radius: 10px; cursor: pointer; font-size: 18px;}
+  #keranjangList {margin-top:20px;}
+  #paymentPopup {display:none; position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85);} 
+  .popupBox {background:#fff; color:#000; margin:80px auto; padding:20px; width:80%; border-radius:15px; text-align:center;}
+</style>
+</head>
+<body>
+<audio id="bgm" loop autoplay>
+  <source src="music.mp3" type="audio/mp3">
+</audio>
+
+<div id="login">
+  <h2>Masukkan Nama Anda</h2>
+  <input type="text" id="username" placeholder="Nama..." style="padding:10px; font-size:18px;">
+  <br><br>
+  <button onclick="mulai()" style="background:#00f; color:#fff;">Lanjut</button>
+</div>
+
+<div id="produkSection" style="display:none;">
+  <h2>Pilih Produk</h2>
+  <div id="produkList"></div>
+  <div id="keranjangList"></div>
+  <button id="btnLanjutProduk" onclick="lanjutPilih()" style="background:#28a745; color:white;">Lanjut pilih produk</button>
+  <button id="btnPayment" onclick="openPayment()" style="background:#ffc107; color:black; display:none;">Payment disini</button>
+</div>
+
+<div id="paymentPopup">
+  <div class="popupBox">
+    <h2>Payment</h2>
+    <p>Pilih metode pembayaran:</p>
+    <select id="metode">
+      <option value="Dana">Dana</option>
+      <option value="Qris">Qris</option>
+      <option value="Gopay">Gopay</option>
+      <option value="Bank">Bank</option>
+    </select>
+    <p>Jika sudah transfer tekan tombol di bawah:</p>
+    <button onclick="keWA()" style="background:#25D366; color:white;">Lanjut ke WhatsApp</button>
+  </div>
+</div>
+
+<script>
+let keranjang = [];
+let produk = [
+  {nama:"Produk 1", harga:"0.000"},
+  {nama:"Produk 2", harga:"0.000"},
+  {nama:"Produk 3", harga:"0.000"},
+  {nama:"Produk 4", harga:"0.000"},
+  {nama:"Produk 5", harga:"0.000"}
+];
+
+function mulai(){
+  let user = document.getElementById('username').value;
+  if(user === "") return alert("Masukkan nama dulu");
+  document.getElementById('login').style.display = "none";
+  setTimeout(()=>{
+    document.getElementById('produkSection').style.display = "block";
+    document.getElementById('bgm').play();
+  },1500);
+}
+
+window.onload = ()=>{
+  let list = "";
+  produk.forEach((p,i)=>{
+    list += `<div>
+      <button onclick=\"addKeranjang(${i})\" style='background:#fff;color:#000;'>${p.nama} - ${p.harga}</button>
+    </div>`;
+  });
+  document.getElementById('produkList').innerHTML = list;
+};
+
+function addKeranjang(i){
+  keranjang.push(produk[i]);
+  updateKeranjang();
+}
+
+function updateKeranjang(){
+  let out = "<h3>Keranjang:</h3>";
+  keranjang.forEach(k=> out += `<p>${k.nama} - ${k.harga}</p>`);
+  document.getElementById('keranjangList').innerHTML = out;
+}
+
+function lanjutPilih(){
+  document.getElementById('btnLanjutProduk').style.display = "none";
+  document.getElementById('btnPayment').style.display = "inline-block";
+}
+
+function openPayment(){
+  document.getElementById('paymentPopup').style.display = "block";
+}
+
+function keWA(){
+  let user = document.getElementById('username').value;
+  let metode = document.getElementById('metode').value;
+  let daftar = keranjang.map(k=>`- ${k.nama} | ${k.harga}`).join("%0A");
+
+  let teks = `halo kak, saya ingin membeli%0A${daftar}%0Apayment:${metode}%0Aatas nama:${user}%0A%0Asaya sudah transfer`;
+
+  window.location.href = `https://wa.me/6281220568534?text=${teks}`;
+}
+</script>
+
+</body>
+</html>
