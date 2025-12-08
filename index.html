@@ -12,6 +12,7 @@
             padding: 0;
             box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -19,6 +20,7 @@
             color: #e6f1ff;
             overflow-x: hidden;
             min-height: 100vh;
+            user-select: none;
         }
 
         .background-image {
@@ -27,7 +29,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('https://ibb.co.com/wZcKVPY2.jpg');
+            background-image: url('https://images.unsplash.com/photo-1558618666-fcd25c85cd64?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
@@ -197,6 +199,67 @@
             position: relative;
         }
 
+        /* BUTTON STYLES - SEMUA TOMBOL DAPAT DITEKAN */
+        .button {
+            background: linear-gradient(90deg, #00bfff, #0077b6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Efek tekan pada semua tombol */
+        .button:active {
+            transform: translateY(4px) scale(0.98);
+            box-shadow: 0 2px 8px rgba(0, 191, 255, 0.2);
+        }
+
+        .button:hover:not(:active) {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 191, 255, 0.5);
+        }
+
+        /* Efek ripple saat tombol ditekan */
+        .button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .button:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(40, 40);
+                opacity: 0;
+            }
+        }
+
         .cart-button {
             background: linear-gradient(90deg, #00bfff, #0077b6);
             color: white;
@@ -209,11 +272,18 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: all 0.3s;
+            transition: all 0.2s;
             box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .cart-button:hover {
+        .cart-button:active {
+            transform: translateY(4px) scale(0.98);
+            box-shadow: 0 2px 8px rgba(0, 191, 255, 0.2);
+        }
+
+        .cart-button:hover:not(:active) {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(0, 191, 255, 0.5);
         }
@@ -296,13 +366,6 @@
             color: #64ffda;
         }
 
-        .product-price span {
-            font-size: 1rem;
-            color: #a8b2d1;
-            text-decoration: line-through;
-            margin-left: 5px;
-        }
-
         .add-to-cart {
             width: 100%;
             padding: 12px;
@@ -313,10 +376,17 @@
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
         }
 
-        .add-to-cart:hover {
+        .add-to-cart:active {
+            transform: translateY(4px) scale(0.98);
+            box-shadow: 0 2px 8px rgba(0, 191, 255, 0.2);
+        }
+
+        .add-to-cart:hover:not(:active) {
             background: linear-gradient(90deg, #00bfff, #00ffff);
             box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
         }
@@ -366,6 +436,17 @@
             font-size: 1.5rem;
             cursor: pointer;
             transition: color 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-cart:active {
+            transform: scale(0.9);
+            background-color: rgba(255, 0, 85, 0.1);
         }
 
         .close-cart:hover {
@@ -408,6 +489,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .remove-item:active {
+            transform: scale(0.9);
         }
 
         .cart-total {
@@ -431,11 +517,18 @@
             font-size: 1.2rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.2s;
             box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .checkout-button:hover {
+        .checkout-button:active {
+            transform: translateY(4px) scale(0.98);
+            box-shadow: 0 2px 8px rgba(0, 191, 255, 0.2);
+        }
+
+        .checkout-button:hover:not(:active) {
             background: linear-gradient(90deg, #0077b6, #00bfff);
             box-shadow: 0 6px 20px rgba(0, 191, 255, 0.5);
         }
@@ -523,6 +616,11 @@
             margin-bottom: 15px;
             border: 1px solid rgba(0, 191, 255, 0.2);
             transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .payment-option:active {
+            transform: scale(0.98);
         }
 
         .payment-option:hover {
@@ -533,6 +631,7 @@
         .payment-option.selected {
             border-color: #64ffda;
             background: rgba(100, 255, 218, 0.1);
+            transform: scale(1.02);
         }
 
         .payment-option-title {
@@ -556,11 +655,18 @@
             align-items: center;
             justify-content: center;
             gap: 15px;
-            transition: all 0.3s;
+            transition: all 0.2s;
             box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
+            position: relative;
+            overflow: hidden;
         }
 
-        .whatsapp-button:hover {
+        .whatsapp-button:active {
+            transform: translateY(4px) scale(0.98);
+            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.2);
+        }
+
+        .whatsapp-button:hover:not(:active) {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
         }
@@ -580,8 +686,13 @@
             transition: all 0.3s;
         }
 
-        .close-payment:hover {
+        .close-payment:active {
+            transform: scale(0.9);
             background: #ff0055;
+        }
+
+        .close-payment:hover {
+            background: rgba(255, 0, 85, 0.8);
         }
 
         /* Music Player */
@@ -616,11 +727,26 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            transition: all 0.2s;
         }
 
-        .music-control:hover {
+        .music-control:active {
+            transform: scale(0.9);
+        }
+
+        .music-control:hover:not(:active) {
             transform: scale(1.1);
+        }
+
+        /* Feedback visual saat tombol ditekan */
+        .pressed {
+            animation: pressAnimation 0.2s ease;
+        }
+
+        @keyframes pressAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(0.95); }
+            100% { transform: scale(1); }
         }
 
         /* Responsive Design */
@@ -644,6 +770,10 @@
             .welcome-screen h1 {
                 font-size: 2.2rem;
             }
+            
+            .button, .cart-button, .add-to-cart, .checkout-button, .whatsapp-button {
+                padding: 14px 20px;
+            }
         }
     </style>
 </head>
@@ -662,7 +792,7 @@
             <label for="customerName">Nama Pembeli</label>
             <input type="text" id="customerName" placeholder="Masukkan nama lengkap Anda">
         </div>
-        <button class="cart-button" id="startButton">
+        <button class="button" id="startButton">
             <i class="fas fa-play"></i> Mulai Belanja
         </button>
     </div>
@@ -854,6 +984,34 @@
             }).format(amount);
         }
 
+        // Fungsi untuk memberikan efek visual saat tombol ditekan
+        function addPressEffect(button) {
+            button.classList.add('pressed');
+            setTimeout(() => {
+                button.classList.remove('pressed');
+            }, 200);
+        }
+
+        // Fungsi untuk membuat efek ripple pada tombol
+        function createRipple(event) {
+            const button = event.currentTarget;
+            const circle = document.createElement("span");
+            const diameter = Math.max(button.clientWidth, button.clientHeight);
+            const radius = diameter / 2;
+
+            circle.style.width = circle.style.height = `${diameter}px`;
+            circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
+            circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
+            circle.classList.add("ripple");
+
+            const ripple = button.getElementsByClassName("ripple")[0];
+            if (ripple) {
+                ripple.remove();
+            }
+
+            button.appendChild(circle);
+        }
+
         // Update tampilan keranjang
         function updateCart() {
             // Update jumlah item di keranjang
@@ -885,8 +1043,9 @@
             // Tambahkan event listener untuk tombol hapus
             document.querySelectorAll('.remove-item').forEach(button => {
                 button.addEventListener('click', function() {
+                    addPressEffect(this);
                     const productId = parseInt(this.getAttribute('data-id'));
-                    removeFromCart(productId);
+                    setTimeout(() => removeFromCart(productId), 100);
                 });
             });
         }
@@ -901,7 +1060,7 @@
                 // Update status tombol produk
                 const productButton = document.querySelector(`.add-to-cart[data-id="${productId}"]`);
                 if (productButton) {
-                    productButton.textContent = "Ditambahkan ke Keranjang";
+                    productButton.textContent = "Ditambahkan!";
                     productButton.classList.add('added');
                     
                     // Reset tombol setelah 2 detik
@@ -943,9 +1102,10 @@
             
             // Tambahkan event listener untuk tombol tambah ke keranjang
             document.querySelectorAll('.add-to-cart').forEach(button => {
-                button.addEventListener('click', function() {
+                button.addEventListener('click', function(e) {
+                    addPressEffect(this);
                     const productId = parseInt(this.getAttribute('data-id'));
-                    addToCart(productId);
+                    setTimeout(() => addToCart(productId), 100);
                 });
             });
         }
@@ -1032,8 +1192,10 @@ Atas nama: ${customerName}`;
             updateCart();
         }
 
-        // Event Listeners
-        startButton.addEventListener('click', function() {
+        // Event Listeners untuk semua tombol dengan efek tekan
+        startButton.addEventListener('click', function(e) {
+            addPressEffect(this);
+            
             // Validasi input nama
             if (!customerNameInput.value.trim()) {
                 alert("Masukkan nama Anda terlebih dahulu.");
@@ -1070,22 +1232,29 @@ Atas nama: ${customerName}`;
         // Event listener untuk Enter di input nama
         customerNameInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                startButton.click();
+                addPressEffect(startButton);
+                setTimeout(() => startButton.click(), 100);
             }
         });
 
-        openCartButton.addEventListener('click', function() {
-            cartModal.classList.add('active');
+        openCartButton.addEventListener('click', function(e) {
+            addPressEffect(this);
+            setTimeout(() => cartModal.classList.add('active'), 100);
         });
 
-        closeCartButton.addEventListener('click', function() {
-            cartModal.classList.remove('active');
+        closeCartButton.addEventListener('click', function(e) {
+            addPressEffect(this);
+            setTimeout(() => cartModal.classList.remove('active'), 100);
         });
 
-        checkoutButton.addEventListener('click', processCheckout);
+        checkoutButton.addEventListener('click', function(e) {
+            addPressEffect(this);
+            setTimeout(() => processCheckout(), 100);
+        });
 
-        closePaymentButton.addEventListener('click', function() {
-            paymentModal.classList.remove('active');
+        closePaymentButton.addEventListener('click', function(e) {
+            addPressEffect(this);
+            setTimeout(() => paymentModal.classList.remove('active'), 100);
         });
 
         // Pilih metode pembayaran
@@ -1100,21 +1269,36 @@ Atas nama: ${customerName}`;
             });
         });
 
-        whatsappButton.addEventListener('click', sendWhatsAppMessage);
-
-        // Kontrol musik
-        playMusicButton.addEventListener('click', function() {
-            backgroundMusic.play();
-            isMusicPlaying = true;
-            playMusicButton.style.display = 'none';
-            pauseMusicButton.style.display = 'flex';
+        whatsappButton.addEventListener('click', function(e) {
+            addPressEffect(this);
+            setTimeout(() => sendWhatsAppMessage(), 100);
         });
 
-        pauseMusicButton.addEventListener('click', function() {
-            backgroundMusic.pause();
-            isMusicPlaying = false;
-            pauseMusicButton.style.display = 'none';
-            playMusicButton.style.display = 'flex';
+        // Kontrol musik
+        playMusicButton.addEventListener('click', function(e) {
+            addPressEffect(this);
+            setTimeout(() => {
+                backgroundMusic.play();
+                isMusicPlaying = true;
+                playMusicButton.style.display = 'none';
+                pauseMusicButton.style.display = 'flex';
+            }, 100);
+        });
+
+        pauseMusicButton.addEventListener('click', function(e) {
+            addPressEffect(this);
+            setTimeout(() => {
+                backgroundMusic.pause();
+                isMusicPlaying = false;
+                pauseMusicButton.style.display = 'none';
+                playMusicButton.style.display = 'flex';
+            }, 100);
+        });
+
+        // Tambahkan efek ripple ke semua tombol utama
+        const allButtons = document.querySelectorAll('.button, .cart-button, .add-to-cart, .checkout-button, .whatsapp-button, .music-control, .payment-option');
+        allButtons.forEach(button => {
+            button.addEventListener('click', createRipple);
         });
 
         // Tutup modal saat klik di luar
@@ -1135,6 +1319,26 @@ Atas nama: ${customerName}`;
         window.addEventListener('load', function() {
             customerNameInput.focus();
         });
+
+        // Tambahkan style untuk efek ripple
+        const style = document.createElement('style');
+        style.textContent = `
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background-color: rgba(255, 255, 255, 0.7);
+                transform: scale(0);
+                animation: ripple-animation 0.6s linear;
+            }
+            
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
