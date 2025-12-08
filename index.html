@@ -76,6 +76,10 @@
             transition: opacity 0.5s ease;
         }
 
+        .welcome-screen.hidden {
+            display: none;
+        }
+
         .welcome-screen h1 {
             font-size: 3rem;
             margin-bottom: 30px;
@@ -130,20 +134,16 @@
             left: 0;
             width: 100%;
             height: 100%;
-            display: flex;
+            display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             background-color: #0a192f;
             z-index: 99;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
         }
 
         .loading-screen.active {
-            opacity: 1;
-            pointer-events: all;
+            display: flex;
         }
 
         .spinner {
@@ -167,6 +167,10 @@
             padding: 90px 20px 30px;
             max-width: 1200px;
             margin: 0 auto;
+        }
+
+        .main-content.active {
+            display: block;
         }
 
         .header {
@@ -217,47 +221,25 @@
             box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
             position: relative;
             overflow: hidden;
+            outline: none;
         }
 
         /* Efek tekan pada semua tombol */
         .button:active {
-            transform: translateY(4px) scale(0.98);
-            box-shadow: 0 2px 8px rgba(0, 191, 255, 0.2);
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(0, 191, 255, 0.2);
         }
 
-        .button:hover:not(:active) {
+        .button:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(0, 191, 255, 0.5);
         }
 
-        /* Efek ripple saat tombol ditekan */
-        .button::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
-        }
-
-        .button:focus:not(:active)::after {
-            animation: ripple 1s ease-out;
-        }
-
-        @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(40, 40);
-                opacity: 0;
-            }
+        /* Tombol khusus untuk mulai */
+        #startButton {
+            margin-top: 20px;
+            padding: 15px 30px;
+            font-size: 1.2rem;
         }
 
         .cart-button {
@@ -276,14 +258,15 @@
             box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
             position: relative;
             overflow: hidden;
+            outline: none;
         }
 
         .cart-button:active {
-            transform: translateY(4px) scale(0.98);
-            box-shadow: 0 2px 8px rgba(0, 191, 255, 0.2);
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(0, 191, 255, 0.2);
         }
 
-        .cart-button:hover:not(:active) {
+        .cart-button:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(0, 191, 255, 0.5);
         }
@@ -379,14 +362,15 @@
             transition: all 0.2s;
             position: relative;
             overflow: hidden;
+            outline: none;
         }
 
         .add-to-cart:active {
-            transform: translateY(4px) scale(0.98);
-            box-shadow: 0 2px 8px rgba(0, 191, 255, 0.2);
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(0, 191, 255, 0.2);
         }
 
-        .add-to-cart:hover:not(:active) {
+        .add-to-cart:hover {
             background: linear-gradient(90deg, #00bfff, #00ffff);
             box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
         }
@@ -442,6 +426,7 @@
             align-items: center;
             justify-content: center;
             border-radius: 50%;
+            outline: none;
         }
 
         .close-cart:active {
@@ -490,6 +475,7 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
+            outline: none;
         }
 
         .remove-item:active {
@@ -521,14 +507,15 @@
             box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
             position: relative;
             overflow: hidden;
+            outline: none;
         }
 
         .checkout-button:active {
-            transform: translateY(4px) scale(0.98);
-            box-shadow: 0 2px 8px rgba(0, 191, 255, 0.2);
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(0, 191, 255, 0.2);
         }
 
-        .checkout-button:hover:not(:active) {
+        .checkout-button:hover {
             background: linear-gradient(90deg, #0077b6, #00bfff);
             box-shadow: 0 6px 20px rgba(0, 191, 255, 0.5);
         }
@@ -542,17 +529,13 @@
             height: 100%;
             background: rgba(10, 25, 47, 0.98);
             z-index: 1100;
-            display: flex;
+            display: none;
             justify-content: center;
             align-items: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
         }
 
         .payment-modal.active {
-            opacity: 1;
-            pointer-events: all;
+            display: flex;
         }
 
         .payment-container {
@@ -563,6 +546,7 @@
             width: 90%;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             border: 2px solid rgba(0, 191, 255, 0.3);
+            position: relative;
         }
 
         .payment-header {
@@ -617,6 +601,7 @@
             border: 1px solid rgba(0, 191, 255, 0.2);
             transition: all 0.3s;
             cursor: pointer;
+            outline: none;
         }
 
         .payment-option:active {
@@ -659,14 +644,15 @@
             box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
             position: relative;
             overflow: hidden;
+            outline: none;
         }
 
         .whatsapp-button:active {
-            transform: translateY(4px) scale(0.98);
-            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.2);
+            transform: scale(0.95);
+            box-shadow: 0 2px 5px rgba(37, 211, 102, 0.2);
         }
 
-        .whatsapp-button:hover:not(:active) {
+        .whatsapp-button:hover {
             transform: translateY(-5px);
             box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
         }
@@ -684,6 +670,7 @@
             font-size: 1.5rem;
             cursor: pointer;
             transition: all 0.3s;
+            outline: none;
         }
 
         .close-payment:active {
@@ -728,25 +715,15 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s;
+            outline: none;
         }
 
         .music-control:active {
             transform: scale(0.9);
         }
 
-        .music-control:hover:not(:active) {
+        .music-control:hover {
             transform: scale(1.1);
-        }
-
-        /* Feedback visual saat tombol ditekan */
-        .pressed {
-            animation: pressAnimation 0.2s ease;
-        }
-
-        @keyframes pressAnimation {
-            0% { transform: scale(1); }
-            50% { transform: scale(0.95); }
-            100% { transform: scale(1); }
         }
 
         /* Responsive Design */
@@ -769,10 +746,6 @@
             
             .welcome-screen h1 {
                 font-size: 2.2rem;
-            }
-            
-            .button, .cart-button, .add-to-cart, .checkout-button, .whatsapp-button {
-                padding: 14px 20px;
             }
         }
     </style>
@@ -984,34 +957,6 @@
             }).format(amount);
         }
 
-        // Fungsi untuk memberikan efek visual saat tombol ditekan
-        function addPressEffect(button) {
-            button.classList.add('pressed');
-            setTimeout(() => {
-                button.classList.remove('pressed');
-            }, 200);
-        }
-
-        // Fungsi untuk membuat efek ripple pada tombol
-        function createRipple(event) {
-            const button = event.currentTarget;
-            const circle = document.createElement("span");
-            const diameter = Math.max(button.clientWidth, button.clientHeight);
-            const radius = diameter / 2;
-
-            circle.style.width = circle.style.height = `${diameter}px`;
-            circle.style.left = `${event.clientX - button.getBoundingClientRect().left - radius}px`;
-            circle.style.top = `${event.clientY - button.getBoundingClientRect().top - radius}px`;
-            circle.classList.add("ripple");
-
-            const ripple = button.getElementsByClassName("ripple")[0];
-            if (ripple) {
-                ripple.remove();
-            }
-
-            button.appendChild(circle);
-        }
-
         // Update tampilan keranjang
         function updateCart() {
             // Update jumlah item di keranjang
@@ -1043,9 +988,8 @@
             // Tambahkan event listener untuk tombol hapus
             document.querySelectorAll('.remove-item').forEach(button => {
                 button.addEventListener('click', function() {
-                    addPressEffect(this);
                     const productId = parseInt(this.getAttribute('data-id'));
-                    setTimeout(() => removeFromCart(productId), 100);
+                    removeFromCart(productId);
                 });
             });
         }
@@ -1102,10 +1046,9 @@
             
             // Tambahkan event listener untuk tombol tambah ke keranjang
             document.querySelectorAll('.add-to-cart').forEach(button => {
-                button.addEventListener('click', function(e) {
-                    addPressEffect(this);
+                button.addEventListener('click', function() {
                     const productId = parseInt(this.getAttribute('data-id'));
-                    setTimeout(() => addToCart(productId), 100);
+                    addToCart(productId);
                 });
             });
         }
@@ -1192,10 +1135,8 @@ Atas nama: ${customerName}`;
             updateCart();
         }
 
-        // Event Listeners untuk semua tombol dengan efek tekan
-        startButton.addEventListener('click', function(e) {
-            addPressEffect(this);
-            
+        // Event Listeners
+        startButton.addEventListener('click', function() {
             // Validasi input nama
             if (!customerNameInput.value.trim()) {
                 alert("Masukkan nama Anda terlebih dahulu.");
@@ -1207,13 +1148,13 @@ Atas nama: ${customerName}`;
             displayName.textContent = customerName;
             
             // Tampilkan loading screen
-            welcomeScreen.style.opacity = '0';
+            welcomeScreen.classList.add('hidden');
             loadingScreen.classList.add('active');
             
             // Simulasi loading selama 3 detik
             setTimeout(() => {
                 loadingScreen.classList.remove('active');
-                mainContent.style.display = 'block';
+                mainContent.classList.add('active');
                 
                 // Tampilkan produk
                 displayProducts();
@@ -1232,29 +1173,22 @@ Atas nama: ${customerName}`;
         // Event listener untuk Enter di input nama
         customerNameInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
-                addPressEffect(startButton);
-                setTimeout(() => startButton.click(), 100);
+                startButton.click();
             }
         });
 
-        openCartButton.addEventListener('click', function(e) {
-            addPressEffect(this);
-            setTimeout(() => cartModal.classList.add('active'), 100);
+        openCartButton.addEventListener('click', function() {
+            cartModal.classList.add('active');
         });
 
-        closeCartButton.addEventListener('click', function(e) {
-            addPressEffect(this);
-            setTimeout(() => cartModal.classList.remove('active'), 100);
+        closeCartButton.addEventListener('click', function() {
+            cartModal.classList.remove('active');
         });
 
-        checkoutButton.addEventListener('click', function(e) {
-            addPressEffect(this);
-            setTimeout(() => processCheckout(), 100);
-        });
+        checkoutButton.addEventListener('click', processCheckout);
 
-        closePaymentButton.addEventListener('click', function(e) {
-            addPressEffect(this);
-            setTimeout(() => paymentModal.classList.remove('active'), 100);
+        closePaymentButton.addEventListener('click', function() {
+            paymentModal.classList.remove('active');
         });
 
         // Pilih metode pembayaran
@@ -1269,36 +1203,21 @@ Atas nama: ${customerName}`;
             });
         });
 
-        whatsappButton.addEventListener('click', function(e) {
-            addPressEffect(this);
-            setTimeout(() => sendWhatsAppMessage(), 100);
-        });
+        whatsappButton.addEventListener('click', sendWhatsAppMessage);
 
         // Kontrol musik
-        playMusicButton.addEventListener('click', function(e) {
-            addPressEffect(this);
-            setTimeout(() => {
-                backgroundMusic.play();
-                isMusicPlaying = true;
-                playMusicButton.style.display = 'none';
-                pauseMusicButton.style.display = 'flex';
-            }, 100);
+        playMusicButton.addEventListener('click', function() {
+            backgroundMusic.play();
+            isMusicPlaying = true;
+            playMusicButton.style.display = 'none';
+            pauseMusicButton.style.display = 'flex';
         });
 
-        pauseMusicButton.addEventListener('click', function(e) {
-            addPressEffect(this);
-            setTimeout(() => {
-                backgroundMusic.pause();
-                isMusicPlaying = false;
-                pauseMusicButton.style.display = 'none';
-                playMusicButton.style.display = 'flex';
-            }, 100);
-        });
-
-        // Tambahkan efek ripple ke semua tombol utama
-        const allButtons = document.querySelectorAll('.button, .cart-button, .add-to-cart, .checkout-button, .whatsapp-button, .music-control, .payment-option');
-        allButtons.forEach(button => {
-            button.addEventListener('click', createRipple);
+        pauseMusicButton.addEventListener('click', function() {
+            backgroundMusic.pause();
+            isMusicPlaying = false;
+            pauseMusicButton.style.display = 'none';
+            playMusicButton.style.display = 'flex';
         });
 
         // Tutup modal saat klik di luar
@@ -1318,27 +1237,22 @@ Atas nama: ${customerName}`;
         // Fokus ke input nama saat halaman dimuat
         window.addEventListener('load', function() {
             customerNameInput.focus();
-        });
-
-        // Tambahkan style untuk efek ripple
-        const style = document.createElement('style');
-        style.textContent = `
-            .ripple {
-                position: absolute;
-                border-radius: 50%;
-                background-color: rgba(255, 255, 255, 0.7);
-                transform: scale(0);
-                animation: ripple-animation 0.6s linear;
-            }
             
-            @keyframes ripple-animation {
-                to {
-                    transform: scale(4);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
+            // Tes: buat tombol berwarna merah saat ditekan untuk debugging
+            document.querySelectorAll('button').forEach(btn => {
+                btn.addEventListener('mousedown', function() {
+                    this.style.backgroundColor = '#ff0055';
+                });
+                
+                btn.addEventListener('mouseup', function() {
+                    this.style.backgroundColor = '';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
     </script>
 </body>
 </html>
