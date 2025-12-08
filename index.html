@@ -1,122 +1,1140 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Web Jual Beli Otomatis</title>
-<style>
- body {
-  margin: 0;
-  font-family: Arial;
-  background: url('https://ibb.co.com/wZcKVPY2.jpg') center/cover no-repeat fixed;
- }
- .overlay {
-  backdrop-filter: blur(5px);
-  min-height: 100vh;
-  padding: 20px;
- }
- .card {
-  background: rgba(255,255,255,0.85);
-  padding: 20px;
-  border-radius: 15px;
-  max-width: 450px;
-  margin: auto;
- }
- button {
-  padding: 12px;
-  width: 100%;
-  border: none;
-  border-radius: 10px;
-  margin-top: 10px;
-  font-size: 16px;
- }
- .hidden { display:none; }
- .popup {
-  position: fixed;
-  top: 50%; left: 50%; transform: translate(-50%, -50%);
-  background: white;
-  padding: 20px;
-  border-radius: 15px;
-  width: 90%; max-width: 400px;
-  display:none;
- }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rev Store - Toko Online Modern</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #0a192f;
+            color: #e6f1ff;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .background-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://ibb.co.com/wZcKVPY2.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        /* Running LED Light */
+        .led-light {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, 
+                #00ffff 0%, 
+                #00bfff 25%, 
+                #ffffff 50%, 
+                #00bfff 75%, 
+                #00ffff 100%);
+            z-index: 1000;
+            animation: ledRunning 3s linear infinite;
+            box-shadow: 0 0 10px rgba(0, 191, 255, 0.7);
+        }
+
+        @keyframes ledRunning {
+            0% { background-position: 0 0; }
+            100% { background-position: 200px 0; }
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(10, 25, 47, 0.95);
+            z-index: 100;
+            transition: opacity 0.5s ease;
+        }
+
+        .welcome-screen h1 {
+            font-size: 3rem;
+            margin-bottom: 30px;
+            text-align: center;
+            background: linear-gradient(90deg, #00ffff, #00bfff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .welcome-screen p {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 600px;
+            padding: 0 20px;
+        }
+
+        .input-container {
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .input-container label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 15px;
+            border-radius: 8px;
+            border: 2px solid #00bfff;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .input-container input:focus {
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+        }
+
+        /* Loading Animation */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #0a192f;
+            z-index: 99;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 8px solid rgba(0, 191, 255, 0.2);
+            border-top-color: #00bfff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 30px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Main Content */
+        .main-content {
+            display: none;
+            padding: 90px 20px 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid rgba(0, 191, 255, 0.3);
+        }
+
+        .header h2 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, #00ffff, #00bfff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .user-info {
+            font-size: 1.1rem;
+            color: #64ffda;
+        }
+
+        .user-info span {
+            font-weight: 600;
+        }
+
+        .cart-container {
+            position: relative;
+        }
+
+        .cart-button {
+            background: linear-gradient(90deg, #00bfff, #0077b6);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
+        }
+
+        .cart-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 191, 255, 0.5);
+        }
+
+        .cart-count {
+            background-color: #ff0055;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+        }
+
+        /* Products Section */
+        .products-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 30px;
+            color: #64ffda;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .product-card {
+            background: rgba(17, 34, 64, 0.8);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 1px solid rgba(0, 191, 255, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            border-color: #00bfff;
+            box-shadow: 0 10px 25px rgba(0, 191, 255, 0.3);
+        }
+
+        .product-image {
+            height: 180px;
+            background: linear-gradient(135deg, #00bfff, #0077b6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image i {
+            font-size: 4rem;
+            color: white;
+            opacity: 0.9;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-name {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #e6f1ff;
+        }
+
+        .product-price {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #64ffda;
+        }
+
+        .product-price span {
+            font-size: 1rem;
+            color: #a8b2d1;
+            text-decoration: line-through;
+            margin-left: 5px;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #00ffff, #00bfff);
+            color: #0a192f;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background: linear-gradient(90deg, #00bfff, #00ffff);
+            box-shadow: 0 0 15px rgba(0, 191, 255, 0.5);
+        }
+
+        .add-to-cart.added {
+            background: linear-gradient(90deg, #64ffda, #00b894);
+            color: #0a192f;
+        }
+
+        /* Cart Modal */
+        .cart-modal {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100%;
+            background: rgba(10, 25, 47, 0.95);
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            transition: right 0.4s ease;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .cart-modal.active {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(0, 191, 255, 0.3);
+        }
+
+        .cart-header h3 {
+            font-size: 1.8rem;
+            color: #64ffda;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            color: #e6f1ff;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close-cart:hover {
+            color: #ff0055;
+        }
+
+        .cart-items {
+            margin-bottom: 30px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cart-item-name {
+            font-size: 1.1rem;
+            color: #e6f1ff;
+        }
+
+        .cart-item-price {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #64ffda;
+        }
+
+        .remove-item {
+            background: #ff0055;
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .cart-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            padding-top: 20px;
+            border-top: 2px solid rgba(0, 191, 255, 0.3);
+        }
+
+        .checkout-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #00bfff, #0077b6);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 191, 255, 0.3);
+        }
+
+        .checkout-button:hover {
+            background: linear-gradient(90deg, #0077b6, #00bfff);
+            box-shadow: 0 6px 20px rgba(0, 191, 255, 0.5);
+        }
+
+        /* Payment Modal */
+        .payment-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 25, 47, 0.98);
+            z-index: 1100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .payment-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .payment-container {
+            background: rgba(17, 34, 64, 0.9);
+            border-radius: 15px;
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border: 2px solid rgba(0, 191, 255, 0.3);
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .payment-header h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #64ffda;
+        }
+
+        .payment-details {
+            background: rgba(10, 25, 47, 0.7);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .payment-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .payment-row:last-child {
+            border-bottom: none;
+        }
+
+        .payment-label {
+            font-weight: 600;
+            color: #a8b2d1;
+        }
+
+        .payment-value {
+            color: #e6f1ff;
+            font-weight: 500;
+        }
+
+        .payment-options {
+            margin-bottom: 30px;
+        }
+
+        .payment-option {
+            background: rgba(10, 25, 47, 0.7);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(0, 191, 255, 0.2);
+            transition: all 0.3s;
+        }
+
+        .payment-option:hover {
+            border-color: #00bfff;
+            background: rgba(0, 191, 255, 0.1);
+        }
+
+        .payment-option.selected {
+            border-color: #64ffda;
+            background: rgba(100, 255, 218, 0.1);
+        }
+
+        .payment-option-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #64ffda;
+            margin-bottom: 8px;
+        }
+
+        .whatsapp-button {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(90deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+        }
+
+        .close-payment {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .close-payment:hover {
+            background: #ff0055;
+        }
+
+        /* Music Player */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(17, 34, 64, 0.9);
+            border-radius: 50px;
+            padding: 12px 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 100;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(0, 191, 255, 0.3);
+        }
+
+        .music-info {
+            font-size: 0.9rem;
+            color: #a8b2d1;
+        }
+
+        .music-control {
+            background: linear-gradient(90deg, #00bfff, #0077b6);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .music-control:hover {
+            transform: scale(1.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+            }
+            
+            .cart-modal {
+                width: 100%;
+                right: -100%;
+            }
+            
+            .payment-container {
+                padding: 25px;
+                width: 95%;
+            }
+            
+            .welcome-screen h1 {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
 </head>
 <body>
-<audio id="music" src="music.mp3" autoplay loop></audio>
+    <!-- Background Image -->
+    <div class="background-image"></div>
+    
+    <!-- Running LED Light -->
+    <div class="led-light"></div>
+    
+    <!-- Welcome Screen -->
+    <div class="welcome-screen" id="welcomeScreen">
+        <h1><i class="fas fa-store"></i> Rev Store</h1>
+        <p>Selamat datang di toko online kami. Masukkan nama Anda untuk mulai berbelanja.</p>
+        <div class="input-container">
+            <label for="customerName">Nama Pembeli</label>
+            <input type="text" id="customerName" placeholder="Masukkan nama lengkap Anda">
+        </div>
+        <button class="cart-button" id="startButton">
+            <i class="fas fa-play"></i> Mulai Belanja
+        </button>
+    </div>
+    
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="spinner"></div>
+        <h2>Memuat Katalog Produk...</h2>
+        <p>Harap tunggu sebentar</p>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content" id="mainContent">
+        <div class="header">
+            <div>
+                <h2><i class="fas fa-shopping-bag"></i> Rev Store</h2>
+                <div class="user-info">Selamat berbelanja, <span id="displayName">Customer</span>!</div>
+            </div>
+            <div class="cart-container">
+                <button class="cart-button" id="openCart">
+                    <i class="fas fa-shopping-cart"></i> Keranjang
+                    <div class="cart-count" id="cartCount">0</div>
+                </button>
+            </div>
+        </div>
+        
+        <div class="products-section">
+            <h3 class="section-title"><i class="fas fa-box-open"></i> Produk Tersedia</h3>
+            <div class="products-grid" id="productsGrid">
+                <!-- Products will be loaded here -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Keranjang Belanja</h3>
+            <button class="close-cart" id="closeCart"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items will be loaded here -->
+        </div>
+        <div class="cart-total">
+            <span>Total:</span>
+            <span id="cartTotal">Rp 0</span>
+        </div>
+        <button class="checkout-button" id="checkoutButton">
+            <i class="fas fa-credit-card"></i> Proses Pembayaran
+        </button>
+    </div>
+    
+    <!-- Payment Modal -->
+    <div class="payment-modal" id="paymentModal">
+        <div class="payment-container">
+            <button class="close-payment" id="closePayment"><i class="fas fa-times"></i></button>
+            <div class="payment-header">
+                <h3><i class="fas fa-credit-card"></i> Pembayaran</h3>
+                <p>Lanjutkan pembayaran dengan memilih metode pembayaran di bawah</p>
+            </div>
+            
+            <div class="payment-details">
+                <div class="payment-row">
+                    <div class="payment-label">Nama Pembeli:</div>
+                    <div class="payment-value" id="paymentCustomerName">-</div>
+                </div>
+                <div class="payment-row">
+                    <div class="payment-label">Produk yang dibeli:</div>
+                    <div class="payment-value" id="paymentProducts">-</div>
+                </div>
+                <div class="payment-row">
+                    <div class="payment-label">Total Harga:</div>
+                    <div class="payment-value" id="paymentTotal">Rp 0</div>
+                </div>
+            </div>
+            
+            <div class="payment-options">
+                <h3 class="section-title" style="margin-bottom: 15px;">Metode Pembayaran</h3>
+                
+                <div class="payment-option" data-method="dana">
+                    <div class="payment-option-title">DANA</div>
+                    <div>085828481568</div>
+                </div>
+                
+                <div class="payment-option" data-method="qris">
+                    <div class="payment-option-title">QRIS</div>
+                    <div>Minta ke admin</div>
+                </div>
+                
+                <div class="payment-option" data-method="gopay">
+                    <div class="payment-option-title">Gopay</div>
+                    <div>085828481568</div>
+                </div>
+                
+                <div class="payment-option" data-method="bank">
+                    <div class="payment-option-title">Bank Transfer</div>
+                    <div>BRI: 0123-4567-8901 (A/N Rev Store)</div>
+                </div>
+            </div>
+            
+            <button class="whatsapp-button" id="whatsappButton">
+                <i class="fab fa-whatsapp"></i> Untuk Melanjutkan Pergi ke WhatsApp
+            </button>
+            <p style="text-align: center; margin-top: 15px; font-size: 0.9rem; color: #a8b2d1;">
+                Pesan akan otomatis dikirim ke admin
+            </p>
+        </div>
+    </div>
+    
+    <!-- Music Player -->
+    <div class="music-player">
+        <div class="music-info">
+            <div id="songTitle">Background Music</div>
+            <div style="font-size: 0.8rem;">Rev Store Theme</div>
+        </div>
+        <button class="music-control" id="playMusic">
+            <i class="fas fa-play"></i>
+        </button>
+        <button class="music-control" id="pauseMusic" style="display: none;">
+            <i class="fas fa-pause"></i>
+        </button>
+    </div>
+    
+    <!-- Audio Element for Background Music -->
+    <audio id="backgroundMusic" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3" type="audio/mpeg">
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
 
-<div class="overlay">
- <div class="card" id="login">
-  <h2>Masukkan Nama</h2>
-  <input id="namaInput" placeholder="Nama Anda" style="width:100%;padding:10px;border-radius:10px;border:1px solid #999;">
-  <button onclick="masuk()">Masuk</button>
- </div>
+    <script>
+        // Data produk
+        const products = [
+            { id: 1, name: "Rev Gaming Mouse", price: 250000, icon: "fa-mouse" },
+            { id: 2, name: "Rev Mechanical Keyboard", price: 450000, icon: "fa-keyboard" },
+            { id: 3, name: "Rev Gaming Headset", price: 350000, icon: "fa-headphones" },
+            { id: 4, name: "Rev Mousepad XL", price: 150000, icon: "fa-square" },
+            { id: 5, name: "Rev Webcam HD", price: 500000, icon: "fa-video" }
+        ];
 
- <div class="card hidden" id="produkPage">
-  <h2>Pilih Produk</h2>
-  <div>
-   <label><input type="checkbox" class="produk" data-harga="10000" value="Produk A"> Produk A - 10.000</label><br>
-   <label><input type="checkbox" class="produk" data-harga="20000" value="Produk B"> Produk B - 20.000</label><br>
-   <label><input type="checkbox" class="produk" data-harga="30000" value="Produk C"> Produk C - 30.000</label><br>
-  </div>
-  <button id="btnLanjut" onclick="lanjut()">Lanjut Pilih Produk</button>
-  <button id="btnPay" class="hidden" onclick="openPay()">Payment Disini</button>
- </div>
-</div>
+        // Data pembayaran
+        const paymentMethods = {
+            dana: "085828481568",
+            qris: "Minta ke admin",
+            gopay: "085828481568",
+            bank: "BRI: 0123-4567-8901 (A/N Rev Store)"
+        };
 
-<div class="popup" id="popupPay">
- <h3>Payment</h3>
- <p>Pilih metode payment lalu transfer.</p>
- <select id="paySelect" style="width:100%;padding:10px;border-radius:10px;">
-  <option value="DANA">DANA</option>
-  <option value="QRIS">QRIS</option>
-  <option value="GOPAY">GOPAY</option>
-  <option value="BANK">BANK</option>
- </select>
- <button onclick="kirimWA()">Lanjut ke WhatsApp</button>
-</div>
+        // Data WhatsApp
+        const whatsappNumber = "6281220568534";
 
-<script>
-let namaUser = "";
+        // State aplikasi
+        let customerName = "";
+        let cart = [];
+        let selectedPaymentMethod = "";
+        let isMusicPlaying = false;
 
-function masuk(){
- const n = document.getElementById("namaInput").value.trim();
- if(!n) return alert("Nama wajib diisi");
- namaUser = n;
- document.getElementById("login").classList.add("hidden");
- setTimeout(()=>{
-  document.getElementById("produkPage").classList.remove("hidden");
-  document.getElementById("music").play();
- },700);
-}
+        // DOM Elements
+        const welcomeScreen = document.getElementById('welcomeScreen');
+        const loadingScreen = document.getElementById('loadingScreen');
+        const mainContent = document.getElementById('mainContent');
+        const customerNameInput = document.getElementById('customerName');
+        const startButton = document.getElementById('startButton');
+        const displayName = document.getElementById('displayName');
+        const productsGrid = document.getElementById('productsGrid');
+        const cartModal = document.getElementById('cartModal');
+        const openCartButton = document.getElementById('openCart');
+        const closeCartButton = document.getElementById('closeCart');
+        const cartItems = document.getElementById('cartItems');
+        const cartCount = document.getElementById('cartCount');
+        const cartTotal = document.getElementById('cartTotal');
+        const checkoutButton = document.getElementById('checkoutButton');
+        const paymentModal = document.getElementById('paymentModal');
+        const closePaymentButton = document.getElementById('closePayment');
+        const paymentCustomerName = document.getElementById('paymentCustomerName');
+        const paymentProducts = document.getElementById('paymentProducts');
+        const paymentTotal = document.getElementById('paymentTotal');
+        const paymentOptions = document.querySelectorAll('.payment-option');
+        const whatsappButton = document.getElementById('whatsappButton');
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const playMusicButton = document.getElementById('playMusic');
+        const pauseMusicButton = document.getElementById('pauseMusic');
 
-function lanjut(){
- document.getElementById("btnLanjut").classList.add("hidden");
- document.getElementById("btnPay").classList.remove("hidden");
-}
+        // Format angka ke format Rupiah
+        function formatRupiah(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0
+            }).format(amount);
+        }
 
-function openPay(){
- document.getElementById("popupPay").style.display = "block";
-}
+        // Update tampilan keranjang
+        function updateCart() {
+            // Update jumlah item di keranjang
+            cartCount.textContent = cart.length;
+            
+            // Update item keranjang
+            cartItems.innerHTML = '';
+            let total = 0;
+            
+            cart.forEach(item => {
+                const product = products.find(p => p.id === item.id);
+                total += product.price;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <div class="cart-item-name">${product.name}</div>
+                    <div class="cart-item-price">${formatRupiah(product.price)}</div>
+                    <button class="remove-item" data-id="${product.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                `;
+                cartItems.appendChild(cartItem);
+            });
+            
+            // Update total
+            cartTotal.textContent = formatRupiah(total);
+            
+            // Tambahkan event listener untuk tombol hapus
+            document.querySelectorAll('.remove-item').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    removeFromCart(productId);
+                });
+            });
+        }
 
-function kirimWA(){
- let list = "";
- let total = 0;
- document.querySelectorAll('.produk:checked').forEach((p,i)=>{
-  list += `${i+1}. ${p.value}%0Aharga: ${p.dataset.harga}%0A`;
-  total += Number(p.dataset.harga);
- });
- const pay = document.getElementById("paySelect").value;
- const wa = "6281220568534";
- const msg = `halo kak, saya ingin membeli%0A`+
- `nama: ${namaUser}%0A`+
- `total harga: ${total}%0A`+
- `payment: ${pay}%0A`+
- `saya sudah transfer%0A`+
- `list produk:%0A${list}`;
- window.location.href = `https://wa.me/${wa}?text=${msg}`;
-}
-</script>
+        // Tambah produk ke keranjang
+        function addToCart(productId) {
+            // Cek apakah produk sudah ada di keranjang
+            if (!cart.find(item => item.id === productId)) {
+                cart.push({ id: productId });
+                updateCart();
+                
+                // Update status tombol produk
+                const productButton = document.querySelector(`.add-to-cart[data-id="${productId}"]`);
+                if (productButton) {
+                    productButton.textContent = "Ditambahkan ke Keranjang";
+                    productButton.classList.add('added');
+                    
+                    // Reset tombol setelah 2 detik
+                    setTimeout(() => {
+                        productButton.textContent = "Tambah ke Keranjang";
+                        productButton.classList.remove('added');
+                    }, 2000);
+                }
+            }
+        }
 
+        // Hapus produk dari keranjang
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+        }
+
+        // Tampilkan produk
+        function displayProducts() {
+            productsGrid.innerHTML = '';
+            
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        <i class="fas ${product.icon}"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">${product.name}</h3>
+                        <div class="product-price">${formatRupiah(product.price)}</div>
+                        <button class="add-to-cart" data-id="${product.id}">
+                            <i class="fas fa-cart-plus"></i> Tambah ke Keranjang
+                        </button>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+            
+            // Tambahkan event listener untuk tombol tambah ke keranjang
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    addToCart(productId);
+                });
+            });
+        }
+
+        // Proses checkout
+        function processCheckout() {
+            if (cart.length === 0) {
+                alert("Keranjang belanja Anda kosong. Tambahkan produk terlebih dahulu.");
+                return;
+            }
+            
+            // Tutup modal keranjang
+            cartModal.classList.remove('active');
+            
+            // Update data pembayaran
+            paymentCustomerName.textContent = customerName;
+            
+            // Daftar produk yang dibeli
+            const productNames = cart.map(item => {
+                const product = products.find(p => p.id === item.id);
+                return product.name;
+            }).join(", ");
+            
+            paymentProducts.textContent = productNames;
+            
+            // Total harga
+            const total = cart.reduce((sum, item) => {
+                const product = products.find(p => p.id === item.id);
+                return sum + product.price;
+            }, 0);
+            
+            paymentTotal.textContent = formatRupiah(total);
+            
+            // Reset pilihan metode pembayaran
+            selectedPaymentMethod = "";
+            paymentOptions.forEach(option => option.classList.remove('selected'));
+            
+            // Tampilkan modal pembayaran
+            setTimeout(() => {
+                paymentModal.classList.add('active');
+            }, 300);
+        }
+
+        // Kirim pesan WhatsApp
+        function sendWhatsAppMessage() {
+            if (!selectedPaymentMethod) {
+                alert("Pilih metode pembayaran terlebih dahulu.");
+                return;
+            }
+            
+            // Daftar produk yang dibeli
+            const productNames = cart.map(item => {
+                const product = products.find(p => p.id === item.id);
+                return product.name;
+            }).join(", ");
+            
+            // Total harga
+            const total = cart.reduce((sum, item) => {
+                const product = products.find(p => p.id === item.id);
+                return sum + product.price;
+            }, 0);
+            
+            // Buat pesan
+            const message = `Halo kak, saya ingin membeli
+Nama produk: ${productNames}
+Harga: ${formatRupiah(total)}
+Payment: ${selectedPaymentMethod.toUpperCase()}
+Atas nama: ${customerName}`;
+            
+            // Encode pesan untuk URL
+            const encodedMessage = encodeURIComponent(message);
+            
+            // Buat URL WhatsApp
+            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+            
+            // Buka WhatsApp
+            window.open(whatsappUrl, '_blank');
+            
+            // Tutup modal pembayaran
+            paymentModal.classList.remove('active');
+            
+            // Reset keranjang
+            cart = [];
+            updateCart();
+        }
+
+        // Event Listeners
+        startButton.addEventListener('click', function() {
+            // Validasi input nama
+            if (!customerNameInput.value.trim()) {
+                alert("Masukkan nama Anda terlebih dahulu.");
+                customerNameInput.focus();
+                return;
+            }
+            
+            customerName = customerNameInput.value.trim();
+            displayName.textContent = customerName;
+            
+            // Tampilkan loading screen
+            welcomeScreen.style.opacity = '0';
+            loadingScreen.classList.add('active');
+            
+            // Simulasi loading selama 3 detik
+            setTimeout(() => {
+                loadingScreen.classList.remove('active');
+                mainContent.style.display = 'block';
+                
+                // Tampilkan produk
+                displayProducts();
+                
+                // Putar musik otomatis
+                backgroundMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    playMusicButton.style.display = 'none';
+                    pauseMusicButton.style.display = 'flex';
+                }).catch(error => {
+                    console.log("Autoplay diblokir oleh browser");
+                });
+            }, 3000);
+        });
+
+        // Event listener untuk Enter di input nama
+        customerNameInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                startButton.click();
+            }
+        });
+
+        openCartButton.addEventListener('click', function() {
+            cartModal.classList.add('active');
+        });
+
+        closeCartButton.addEventListener('click', function() {
+            cartModal.classList.remove('active');
+        });
+
+        checkoutButton.addEventListener('click', processCheckout);
+
+        closePaymentButton.addEventListener('click', function() {
+            paymentModal.classList.remove('active');
+        });
+
+        // Pilih metode pembayaran
+        paymentOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Hapus seleksi dari semua opsi
+                paymentOptions.forEach(opt => opt.classList.remove('selected'));
+                
+                // Tandai opsi yang dipilih
+                this.classList.add('selected');
+                selectedPaymentMethod = this.getAttribute('data-method');
+            });
+        });
+
+        whatsappButton.addEventListener('click', sendWhatsAppMessage);
+
+        // Kontrol musik
+        playMusicButton.addEventListener('click', function() {
+            backgroundMusic.play();
+            isMusicPlaying = true;
+            playMusicButton.style.display = 'none';
+            pauseMusicButton.style.display = 'flex';
+        });
+
+        pauseMusicButton.addEventListener('click', function() {
+            backgroundMusic.pause();
+            isMusicPlaying = false;
+            pauseMusicButton.style.display = 'none';
+            playMusicButton.style.display = 'flex';
+        });
+
+        // Tutup modal saat klik di luar
+        window.addEventListener('click', function(event) {
+            if (event.target === cartModal) {
+                cartModal.classList.remove('active');
+            }
+            
+            if (event.target === paymentModal) {
+                paymentModal.classList.remove('active');
+            }
+        });
+
+        // Inisialisasi
+        updateCart();
+        
+        // Fokus ke input nama saat halaman dimuat
+        window.addEventListener('load', function() {
+            customerNameInput.focus();
+        });
+    </script>
 </body>
 </html>
